@@ -51,6 +51,7 @@ const Button = styled.button`
 
 function Quotes() {
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState({});
 
   useEffect(() => {
@@ -64,8 +65,14 @@ function Quotes() {
     history.goBack();
   }
   async function getNewQuote() {
-    const response = await queries.allPosts();
-    setPosts(response.data.slip);
+    try {
+      setIsLoading(true);
+      const response = await queries.allPosts();
+      setPosts(response.data.slip);
+    } catch (err) {
+    } finally {
+      setIsLoading(false);
+    }
   }
   return (
     <Wrapper>
@@ -77,7 +84,9 @@ function Quotes() {
           QUOTES CLICKER <Activity />
         </Logo>
         <Quote>{posts.advice}</Quote>
-        <Button onClick={() => getNewQuote()}>GET NEW QUOTE</Button>
+        <Button onClick={() => getNewQuote()} disabled={isLoading}>
+          {isLoading ? <span>Loading...</span> : <span>GET NEW QUOTE</span>}{" "}
+        </Button>
       </Container>
     </Wrapper>
   );

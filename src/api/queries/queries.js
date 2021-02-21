@@ -1,7 +1,8 @@
 import axios from "../../httpClient";
 
 function allPosts() {
-  return axios.get();
+  return axios.get("/advice");
 }
+const exports = { allPosts };
 
-export default { allPosts };
+export default exports;
